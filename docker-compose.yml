@@ -13,7 +13,7 @@ services:
     networks:
       ldap:
     volumes:
-      - /etc/letsencrypt/live/:/etc/letsencrypt/live/:ro
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /var/lib/ipa-data:/data:Z
     ports:
