@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 if [ "$1" == 'help' ] ; then
 	if [ -n "$IMAGE" ] ; then
