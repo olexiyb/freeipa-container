@@ -1,0 +1,37 @@
+version: "3.0"
+
+networks:
+  ldap:
+services:
+  server:
+    build: ./
+    container_name: freeipa-server
+    hostname: ldap.b100pro.com
+    environment:
+      - IPA_SERVER_IP=172.17.0.2
+    restart: always
+    networks:
+      ldap:
+    volumes:
+      - /etc/letsencrypt/live/:/etc/letsencrypt/live/:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /var/lib/ipa-data:/data:Z
+    ports:
+      - "8081:80"
+      - "8443:443"
+      - "389:389"
+      - "636:636"
+      - "88:88"
+      - "464:464"
+      - "88:88/udp"
+      - "464:464/udp"
+      - "123:123/udp"
+      - "7389:7389"
+      - "9443:9443"
+      - "9444:9444"
+      - "9445:9445"
+    tmpfs:
+      - /run
+      - /tmp
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
