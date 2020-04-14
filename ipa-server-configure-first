@@ -33,10 +33,18 @@ function update_server_ip_address () {
 	MY_IP=''
 	if [ -f /run/ipa/ipa-server-ip ] ; then
 		MY_IP=$( cat /run/ipa/ipa-server-ip )
-	fi
-	MY_IP=${MY_IP:-$( /sbin/ip addr show | awk '/inet .*global/ { split($2,a,"/"); print a[1]; }' | head -1 )}
-	if [ "$CURRENT_IP" == "$MY_IP" ] ; then
-		return
+		if [ "$CURRENT_IP" == "$MY_IP" ] ; then
+			return
+		fi
+	else
+		for i in $( /sbin/ip addr show | awk '/inet .*global/ { split($2,a,"/"); print a[1]; }' ) ; do
+			if [ "$CURRENT_IP" == "$i" ] ; then
+				return
+			fi
+			if [ -z "$MY_IP" ] ; then
+				MY_IP="$i"
+			fi
+		done
 	fi
 
 	kdestroy -A
@@ -121,9 +129,11 @@ if [ "$1" == upgrade ] ; then
 		echo "FreeIPA server is already configured but with different version, starting upgrade."
 		# Workaround Lower version of database is expected
 		rm -rf /var/lib/sss/db/*
-		for d in /usr/share/java/resteasy* ; do
-			sed -i 's#^\(JAVA_OPTS=".*-DRESTEASY_LIB=\)/usr/share/java/resteasy[a-z-]*\(.*"\)#\1'$d'\2#' /etc/sysconfig/pki-tomcat
-		done
+		if [ -f /etc/sysconfig/pki-tomcat ]; then
+			for d in /usr/share/java/resteasy* ; do
+				sed -i 's#^\(JAVA_OPTS=".*-DRESTEASY_LIB=\)/usr/share/java/resteasy[a-z-]*\(.*"\)#\1'$d'\2#' /etc/sysconfig/pki-tomcat
+			done
+		fi
 		upgrade_server
 		echo "FreeIPA server upgraded."
 	fi

@@ -22,7 +22,18 @@
                         },
                         "from": {
                             "kind": "ImageStreamTag",
-                            "name": "fedora-30"
+                            "name": "fedora-31"
+                        }
+                    },
+                    {
+                        "name": "fedora-31",
+                        "annotations": {
+                            "openshift.io/display-name": "FreeIPA Server on Fedora 31",
+                            "tags": "freeipa, identity management"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "freeipa/freeipa-server:fedora-31"
                         }
                     },
                     {
@@ -37,28 +48,6 @@
                         }
                     },
                     {
-                        "name": "fedora-29",
-                        "annotations": {
-                            "openshift.io/display-name": "FreeIPA Server on Fedora 29",
-                            "tags": "freeipa, identity management"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "freeipa/freeipa-server:fedora-29"
-                        }
-                    },
-                    {
-                        "name": "fedora-28",
-                        "annotations": {
-                            "openshift.io/display-name": "FreeIPA Server on Fedora 28",
-                            "tags": "freeipa, identity management"
-                        },
-                        "from": {
-                            "kind": "DockerImage",
-                            "name": "freeipa/freeipa-server:fedora-28"
-                        }
-                    },
-                    {
                         "name": "fedora-rawhide",
                         "annotations": {
                             "openshift.io/display-name": "FreeIPA Server on Fedora rawhide",
@@ -67,6 +56,17 @@
                         "from": {
                             "kind": "DockerImage",
                             "name": "freeipa/freeipa-server:fedora-rawhide"
+                        }
+                    },
+                    {
+                        "name": "centos-8",
+                        "annotations": {
+                            "openshift.io/display-name": "FreeIPA Server on CentOS 8",
+                            "tags": "freeipa, identity management"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "freeipa/freeipa-server:centos-8"
                         }
                     },
                     {
