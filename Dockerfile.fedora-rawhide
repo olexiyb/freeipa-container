@@ -1,8 +1,6 @@
 # Clone from the Fedora rawhide image
 FROM registry.fedoraproject.org/fedora:rawhide
 
-MAINTAINER FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>
-
 RUN groupadd -g 288 kdcproxy ; useradd -u 288 -g 288 -c 'IPA KDC Proxy User' -d '/var/lib/kdcproxy' -s '/sbin/nologin' kdcproxy
 RUN groupadd -g 289 ipaapi; useradd -u 289 -g 289 -c 'IPA Framework User' -r -d / -s '/sbin/nologin' ipaapi
 
@@ -26,12 +24,12 @@ RUN echo "DefaultLimitNOFILE=1024" >> /etc/systemd/system.conf
 
 ENTRYPOINT [ "/usr/sbin/init" ]
 STOPSIGNAL RTMIN+3
-RUN mkdir /var/log/journal
 # test-addon: VOLUME [ "/var/log/journal" ]
-# test: systemd-container-failed.sh
+# test: systemd-container-failed.sh systemd-logind.service
 
 # Minimize the systemd setup
 RUN find /etc/systemd/system /usr/lib/systemd/system/{basic,multi-user,sysinit}.target.wants -type l \! -lname /dev/null | xargs rm -v
+RUN systemctl mask systemd-logind.service
 COPY patches/minimal-fedora-31.patch /root/
 RUN patch --verbose -p0 --fuzz=0 < /root/minimal-fedora-31.patch
 # debug: RUN ! find /etc/systemd/system /usr/lib/systemd/system/{basic,multi-user,sysinit}.target.wants /etc/tmpfiles.d -type f | grep .
@@ -59,8 +57,8 @@ COPY utils/prepare-volume-template utils/populate-volume-from-template utils/ext
 RUN /usr/local/bin/extract-rpm-upgrade-scriptlets
 
 # Move configuration and data to data volume
-COPY patches/ipa-data-fedora-32.patch /root
-RUN set -o pipefail ; patch --verbose -p0 --fuzz=0 < /root/ipa-data-fedora-32.patch | tee /dev/stderr | sed -n 's/^patching file //;T;/\.py$/p' | xargs python3 -m compileall
+COPY patches/ipa-data-fedora-33.patch /root
+RUN set -o pipefail ; patch --verbose -p0 --fuzz=0 < /root/ipa-data-fedora-33.patch | tee /dev/stderr | sed -n 's/^patching file //;T;/\.py$/p' | xargs python3 -m compileall
 
 RUN mv /usr/sbin/ipa-join /usr/sbin/ipa-join.orig
 COPY ipa-join /usr/sbin/ipa-join
@@ -104,3 +102,5 @@ LABEL run 'docker run ${RUN_OPTS} --name ${NAME} -v /var/lib/${NAME}:/data:Z -v 
 LABEL RUN_OPTS_FILE '/var/lib/${NAME}/docker-run-opts'
 LABEL stop 'docker stop ${NAME}'
 LABEL uninstall 'docker run --rm --privileged -v /:/host -e HOST=/host -e DATADIR=/var/lib/${NAME} ${IMAGE} /bin/uninstall.sh'
+
+LABEL maintainer="FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>"

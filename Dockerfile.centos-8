@@ -1,7 +1,5 @@
-# Build on top of CentOS 8 image from docker hub since registry.centos.org/centos:8 has not been released yet
-FROM docker.io/library/centos
-
-MAINTAINER FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>
+# Build on top of base CentOS 8 image
+FROM registry.centos.org/centos:8
 
 RUN groupadd -g 288 kdcproxy ; useradd -u 288 -g 288 -c 'IPA KDC Proxy User' -d '/var/lib/kdcproxy' -s '/sbin/nologin' kdcproxy
 RUN groupadd -g 289 ipaapi; useradd -u 289 -g 289 -c 'IPA Framework User' -r -d / -s '/sbin/nologin' ipaapi
@@ -9,7 +7,7 @@ RUN groupadd -g 289 ipaapi; useradd -u 289 -g 289 -c 'IPA Framework User' -r -d 
 # Workaround 1615948
 RUN ln -s /bin/false /usr/sbin/systemd-machine-id-setup
 RUN yum -y module enable idm:DL1
-RUN yum -y install patch && yum -y module install --setopt=install_weak_deps=False idm:DL1/adtrust idm:DL1/dns && yum clean all
+RUN yum -y install patch sudo && yum -y module install --setopt=install_weak_deps=False idm:DL1/adtrust idm:DL1/dns && yum clean all
 
 # debug: RUN test $( getent passwd | grep -E "^(dirsrv:x:389|ipaapi:x:289|kdcproxy:x:288|pkiuser:x:17):" | wc -l ) -eq 4
 
@@ -103,3 +101,5 @@ LABEL run 'docker run ${RUN_OPTS} --name ${NAME} -v /var/lib/${NAME}:/data:Z -v 
 LABEL RUN_OPTS_FILE '/var/lib/${NAME}/docker-run-opts'
 LABEL stop 'docker stop ${NAME}'
 LABEL uninstall 'docker run --rm --privileged -v /:/host -e HOST=/host -e DATADIR=/var/lib/${NAME} ${IMAGE} /bin/uninstall.sh'
+
+LABEL maintainer="FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>"

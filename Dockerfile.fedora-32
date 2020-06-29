@@ -1,15 +1,11 @@
 # Clone from the Fedora 32 image
 FROM registry.fedoraproject.org/fedora:32
 
-MAINTAINER FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>
-
 RUN groupadd -g 288 kdcproxy ; useradd -u 288 -g 288 -c 'IPA KDC Proxy User' -d '/var/lib/kdcproxy' -s '/sbin/nologin' kdcproxy
 RUN groupadd -g 289 ipaapi; useradd -u 289 -g 289 -c 'IPA Framework User' -r -d / -s '/sbin/nologin' ipaapi
 
 # Workaround 1615948
 RUN ln -s /bin/false /usr/sbin/systemd-machine-id-setup
-# Workaround 1820176
-RUN grep enabled=1 /etc/yum.repos.d/fedora-updates-testing.repo && sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/fedora-updates-testing.repo
 RUN dnf upgrade -y --setopt=install_weak_deps=False \
 	&& dnf install -y --setopt=install_weak_deps=False freeipa-server freeipa-server-dns freeipa-server-trust-ad patch \
 	&& dnf clean all
@@ -106,3 +102,5 @@ LABEL run 'docker run ${RUN_OPTS} --name ${NAME} -v /var/lib/${NAME}:/data:Z -v 
 LABEL RUN_OPTS_FILE '/var/lib/${NAME}/docker-run-opts'
 LABEL stop 'docker stop ${NAME}'
 LABEL uninstall 'docker run --rm --privileged -v /:/host -e HOST=/host -e DATADIR=/var/lib/${NAME} ${IMAGE} /bin/uninstall.sh'
+
+LABEL maintainer="FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>"

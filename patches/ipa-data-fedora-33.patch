@@ -1,5 +1,5 @@
---- /usr/lib/python3.8/site-packages/ipaplatform/base/paths.py	2020-06-10 19:34:40.000000000 +0000
-+++ /usr/lib/python3.8/site-packages/ipaplatform/base/paths.py	2020-06-26 09:19:57.078531348 +0000
+--- /usr/lib/python3.9/site-packages/ipaplatform/base/paths.py	2020-06-26 09:13:10.512506200 +0000
++++ /usr/lib/python3.9/site-packages/ipaplatform/base/paths.py	2020-06-26 09:14:06.509741730 +0000
 @@ -72,23 +72,23 @@
      IPA_NSSDB_DIR = "/etc/ipa/nssdb"
      IPA_NSSDB_PWDFILE_TXT = "/etc/ipa/nssdb/pwdfile.txt"
@@ -29,8 +29,8 @@
      NAMED_RFC1912_ZONES = "/etc/named.rfc1912.zones"
      NAMED_ROOT_KEY = "/etc/named.root.key"
      NAMED_MANAGED_KEYS_DIR = "/var/named/dynamic"
---- /usr/lib/python3.8/site-packages/ipaplatform/redhat/paths.py	2019-11-19 09:36:59.087415395 +0000
-+++ /usr/lib/python3.8/site-packages/ipaplatform/redhat/paths.py	2019-11-19 09:37:10.928527450 +0000
+--- /usr/lib/python3.9/site-packages/ipaplatform/redhat/paths.py	2019-11-19 09:36:59.087415395 +0000
++++ /usr/lib/python3.9/site-packages/ipaplatform/redhat/paths.py	2019-11-19 09:37:10.928527450 +0000
 @@ -39,7 +39,7 @@
      AUTHCONFIG = '/usr/sbin/authconfig'
      AUTHSELECT = '/usr/bin/authselect'
@@ -66,8 +66,8 @@
 # Prevent unneeded /etc/httpd/conf.modules.d/02-ipa-wsgi.conf from
 # being created in runtime
 #
---- /usr/lib/python3.8/site-packages/ipaplatform/fedora/paths.py.orig	2019-02-28 13:06:33.000000000 +0000
-+++ /usr/lib/python3.8/site-packages/ipaplatform/fedora/paths.py	2019-03-04 09:01:28.728711145 +0000
+--- /usr/lib/python3.9/site-packages/ipaplatform/fedora/paths.py.orig	2019-02-28 13:06:33.000000000 +0000
++++ /usr/lib/python3.9/site-packages/ipaplatform/fedora/paths.py	2019-03-04 09:01:28.728711145 +0000
 @@ -30,9 +30,7 @@
  
  
@@ -122,8 +122,8 @@
  	workgroup = SAMBA
  	security = user
  
---- /usr/lib/python3.8/site-packages/ipaserver/install/adtrustinstance.py	2019-08-14 15:37:23.000000000 +0000
-+++ /usr/lib/python3.8/site-packages/ipaserver/install/adtrustinstance.py	2019-11-19 08:34:09.065235181 +0000
+--- /usr/lib/python3.9/site-packages/ipaserver/install/adtrustinstance.py	2019-08-14 15:37:23.000000000 +0000
++++ /usr/lib/python3.9/site-packages/ipaserver/install/adtrustinstance.py	2019-11-19 08:34:09.065235181 +0000
 @@ -465,7 +465,9 @@
          conf_fd.write('### Added by IPA Installer ###\n')
          conf_fd.write('[global]\n')
@@ -138,8 +138,8 @@
 #
 # Workaround https://github.com/freeipa/freeipa-container/issues/313
 #
---- /usr/lib64/python3.8/shutil.py	2019-12-18 18:48:49.000000000 +0000
-+++ /usr/lib64/python3.8/shutil.py	2020-03-11 16:17:24.727098610 +0000
+--- /usr/lib64/python3.9/shutil.py	2019-12-18 18:48:49.000000000 +0000
++++ /usr/lib64/python3.9/shutil.py	2020-03-11 16:17:24.727098610 +0000
 @@ -160,6 +160,8 @@
                  raise
              return

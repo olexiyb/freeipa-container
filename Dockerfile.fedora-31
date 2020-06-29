@@ -1,8 +1,6 @@
 # Clone from the Fedora 31 image
 FROM registry.fedoraproject.org/fedora:31
 
-MAINTAINER FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>
-
 RUN groupadd -g 288 kdcproxy ; useradd -u 288 -g 288 -c 'IPA KDC Proxy User' -d '/var/lib/kdcproxy' -s '/sbin/nologin' kdcproxy
 RUN groupadd -g 289 ipaapi; useradd -u 289 -g 289 -c 'IPA Framework User' -r -d / -s '/sbin/nologin' ipaapi
 
@@ -56,8 +54,8 @@ ADD hostnamectl-wrapper /usr/bin/nisdomainname
 ## # test: systemd-container-ipa-server-install.sh
 
 # Move configuration and data to data volume
-COPY patches/ipa-data-fedora-30.patch /root
-RUN set -o pipefail ; patch --verbose -p0 --fuzz=0 < /root/ipa-data-fedora-30.patch | tee /dev/stderr | sed -n 's/^patching file //;T;/\.py$/p' | xargs python3 -m compileall
+COPY patches/ipa-data-fedora-31.patch /root
+RUN set -o pipefail ; patch --verbose -p0 --fuzz=0 < /root/ipa-data-fedora-31.patch | tee /dev/stderr | sed -n 's/^patching file //;T;/\.py$/p' | xargs python3 -m compileall
 
 RUN mv /usr/sbin/ipa-join /usr/sbin/ipa-join.orig
 COPY ipa-join /usr/sbin/ipa-join
@@ -103,3 +101,5 @@ LABEL run 'docker run ${RUN_OPTS} --name ${NAME} -v /var/lib/${NAME}:/data:Z -v 
 LABEL RUN_OPTS_FILE '/var/lib/${NAME}/docker-run-opts'
 LABEL stop 'docker stop ${NAME}'
 LABEL uninstall 'docker run --rm --privileged -v /:/host -e HOST=/host -e DATADIR=/var/lib/${NAME} ${IMAGE} /bin/uninstall.sh'
+
+LABEL maintainer="FreeIPA Developers <freeipa-devel@lists.fedorahosted.org>"
