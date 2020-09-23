@@ -15,7 +15,7 @@ services:
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/:ro
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - /var/lib/ipa-data:/data:Z
+      - /b100pro/freeipa/data:/data:Z
     ports:
       - "8081:80"
       - "8443:443"
